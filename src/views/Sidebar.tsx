@@ -6,34 +6,39 @@ import { useColorModeValue } from "@/components/ui/color-mode";
 import { useSidebar } from "@/context/SidebarProvider";
 
 import { IconButton, useBreakpointValue, Box, Icon } from "@chakra-ui/react";
-import { VscLayoutSidebarLeft, VscLayoutSidebarLeftOff } from "react-icons/vsc";
+import { LuSquareArrowLeft } from "react-icons/lu";
+import { Tooltip } from "@/components/ui/tooltip";
 
 import SidebarRoutes from "./SidebarRoutes";
-import { Tooltip } from "@/components/ui/tooltip";
+import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
 
   const { isExpanded, toggleSidebar } = useSidebar();
+  const pathname = usePathname();
+
   const isMobile = useBreakpointValue({ base: true, xl: false }); // Check if the screen size is mobile
+  const shouldHideSidebar =
+    pathname === "/login";
 
   // For Desktop
   const sidebarWidth = useBreakpointValue({
     base: "0px",
-    xl: isExpanded ? "220px" : "73px",
+    xl: isExpanded ? "260px" : "73px",
   });
 
-  const bg = useColorModeValue("#fff", "#08070d");
-  const color = useColorModeValue("#757a7d", "white");
+  const bg = useColorModeValue("#fff", "#fff");
+  const color = useColorModeValue("#757a7d", "#757a7d");
   const logoColor = useColorModeValue(
-    "/sahulatpay-logo-light.png",
-    "/sahulatpay-logo-dark.png"
+    "/sahulatpay-logo-light.svg",
+    "/sahulatpay-logo-light.svg"
   );
-  const sidebarborderColor = useColorModeValue("gray.200", "gray.600");
+  const logoCollapse = useColorModeValue("/logo.svg", "/logo.svg")
 
   return (
     <>
       {/* Desktop Sidebar (xl+) */}
-      {!isMobile && (
+      {!isMobile && !shouldHideSidebar && (
         <Box
           position="fixed"
           left="0"
@@ -42,32 +47,30 @@ const Sidebar = () => {
           w={sidebarWidth}
           bg={bg}
           color={color}
-          borderRightWidth={"1px"}
-          borderColor={sidebarborderColor}
-          transition="width 0.35s ease-in-out"
+          shadow={"xs"}
+          transition="width 0.3s ease-in-out"
           p={isExpanded ? 0 : 0}
           py={"4"}
           overflowY="auto"
           zIndex="10"
         >
-          {/* Toggle Button (Desktop) */}
+          {/* Toggle Button & Logo (Desktop) */}
           <Box
             display={{ base: "none", xl: "flex" }}
             flexDir={isExpanded ? "row" : "column"}
             justifyContent={isExpanded ? "space-between" : "center"}
-            alignItems="center"
+            alignItems={isExpanded ? "center" : "start"}
             gap={2}
             w="full"
-            mb="6"
-            mt={isExpanded ? "0" : "4"}
-            px={2}
+            my="5"
+            mb={isExpanded ? "8" : "5"}
+            pl={isExpanded ? 5 : 4.5}
           >
-            <Image src={logoColor} alt="logo" width={"135"} height={"50"} />
+            <Image src={isExpanded ? logoColor : logoCollapse} alt="logo" width={isExpanded ? 130 : 35} height={"50"} />
 
             <Tooltip
               content="Toggle Sidebar"
-              // positioning={{ placement: "right-end" }}
-              positioning={{ offset: { mainAxis: 4, crossAxis: -10 }, placement: "right-end" }}
+              positioning={{ offset: { mainAxis: 4, crossAxis: -6 }, placement: "right-end" }}
               openDelay={0}
               closeDelay={300}
               showArrow
@@ -76,20 +79,19 @@ const Sidebar = () => {
                 aria-label="Toggle Sidebar"
                 onClick={toggleSidebar}
                 variant="ghost"
-                size="lg"
+                size="sm"
                 color={color}
-                // transform={isExpanded ? "rotate(0deg)" : "rotate(180deg)"}
-                mr={isExpanded ? "0" : "1"}
+                transform={isExpanded ? "rotate(0deg)" : "rotate(180deg)"}
                 transition="all 0.35s"
                 zIndex="11"
               >
-                {/* <Icon as={TbLayoutSidebarLeftExpand} boxSize={6} /> */}
-                <Icon
+                <Icon as={LuSquareArrowLeft} boxSize={isExpanded ? 4 : 5} />
+                {/* <Icon
                   as={
-                    isExpanded ? VscLayoutSidebarLeftOff : VscLayoutSidebarLeft
+                    isExpanded ? LuSquareArrowLeft : VscLayoutSidebarLeft
                   }
-                  boxSize={6}
-                />
+                  boxSize={4}
+                /> */}
               </IconButton>
             </Tooltip>
           </Box>

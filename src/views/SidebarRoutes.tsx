@@ -11,27 +11,39 @@ import { VStack, Box, Icon, Text, Flex, chakra } from "@chakra-ui/react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
-import { GrTransaction } from "react-icons/gr";
 import { PiClockCountdownFill } from "react-icons/pi";
 import {
   RiCurrencyFill,
-  RiHomeOfficeFill,
-  RiSecurePaymentFill,
+  RiSecurePaymentLine,
   RiStackFill,
-  RiStore3Fill,
 } from "react-icons/ri";
-import { MdAppBlocking, MdOutlinePayments, MdPayments } from "react-icons/md";
 import {
-  FaCreditCard,
-  FaMoneyBillTransfer,
-  FaSquarePollVertical,
-} from "react-icons/fa6";
+  MdOutlineAppBlocking,
+  MdOutlineLocalGroceryStore,
+  MdOutlinePayments,
+} from "react-icons/md";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { IoChevronDown } from "react-icons/io5";
-import { GoHomeFill } from "react-icons/go";
-import { BiSolidFile, BiSolidFileFind } from "react-icons/bi";
+import {
+  LuArrowLeftRight,
+  LuChartColumnStacked,
+  LuFileSearch,
+  LuFileText,
+  LuLayoutGrid,
+  LuStore,
+} from "react-icons/lu";
+import { HiOutlineOfficeBuilding } from "react-icons/hi";
+import { BsCreditCard2Front } from "react-icons/bs";
 
 interface SidebarRoutesProps {
   onClick?: () => void;
+}
+
+interface SidebarConfigItem {
+  label: string;
+  icon: React.ElementType;
+  url: string;
+  children?: SidebarChildItem[]; // optional
 }
 
 const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
@@ -42,27 +54,39 @@ const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
 
   // Define all sidebar items
   const userSidebarItems = [
-    { label: "Dashboard", icon: GoHomeFill, url: "/admin", children: [] },
+    { label: "Dashboard", icon: LuLayoutGrid, url: "/", children: [] },
     {
       label: "Merchants",
-      icon: RiStore3Fill,
+      icon: LuStore,
       url: "/admin/merchants",
       children: [],
     },
     {
+      label: "Ecommerce Merchants",
+      icon: MdOutlineLocalGroceryStore,
+      url: "#",
+      children: [
+        {
+          label: "wooCommerce",
+          icon: LuStore,
+          url: "#",
+        },
+      ],
+    },
+    {
       label: "Transactions",
-      icon: GrTransaction,
+      icon: LuArrowLeftRight,
       url: "/admin/transactions",
     },
     {
       label: "Reports",
-      icon: BiSolidFile,
+      icon: LuFileText,
       url: "/admin/reports",
       children: [],
     },
     {
       label: "Finance Reports",
-      icon: FaSquarePollVertical,
+      icon: LuChartColumnStacked,
       url: "#",
       children: [],
     },
@@ -86,11 +110,16 @@ const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
     },
     {
       label: "Status Inquiry",
-      icon: BiSolidFileFind,
+      icon: LuFileSearch,
       url: "#",
       children: [],
     },
-    { label: "Back Office", icon: RiHomeOfficeFill, url: "#", children: [] },
+    {
+      label: "Back Office",
+      icon: HiOutlineOfficeBuilding,
+      url: "#",
+      children: [],
+    },
     {
       label: "Initiate Payments",
       icon: FaMoneyBillTransfer,
@@ -99,24 +128,24 @@ const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
     },
     {
       label: "Block Number",
-      icon: MdAppBlocking,
+      icon: MdOutlineAppBlocking,
       url: "#",
       children: [],
     },
     {
       label: "Payment Gateway",
-      icon: RiSecurePaymentFill,
+      icon: RiSecurePaymentLine,
       url: "#",
       children: [
         {
           label: "JazzCash",
           icon: MdOutlinePayments,
-          url: "/admin/gateway/jazz-cash",
+          url: "/gateway/jazz-cash",
         },
         {
           label: "EasyPaisa",
           icon: MdOutlinePayments,
-          url: "/admin/gateway/easypaisa",
+          url: "/gateway/easypaisa",
         },
         {
           label: "Swich",
@@ -137,7 +166,7 @@ const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
     },
     {
       label: "Disbursement Gateway",
-      icon: MdPayments,
+      icon: MdOutlinePayments,
       url: "#",
       children: [
         {
@@ -154,7 +183,7 @@ const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
     },
     {
       label: "Card Gateway",
-      icon: FaCreditCard,
+      icon: BsCreditCard2Front,
       url: "#",
       children: [
         {
@@ -166,22 +195,38 @@ const SidebarRoutes = ({ onClick }: SidebarRoutesProps) => {
     },
   ];
 
+  const isChildItem = (
+    item: SidebarChildItem,
+    allItems: SidebarConfigItem[]
+  ) => {
+    return allItems.some(
+      (parent) =>
+        Array.isArray(parent.children) &&
+        parent.children.some((child) => child.label === item.label)
+    );
+  };
+
   return (
     // Map all sidebar items
-    <VStack align="flex-start" gap="1" h={"fit-content"}>
-      {userSidebarItems.map((item) => (
-        <SidebarItem
-          key={item.label}
-          icon={item.icon}
-          label={item.label}
-          isExpanded={isExpanded}
-          url={item.url}
-          onClick={onClick}
-          nestedItem={item.children}
-          isOpen={openItem === item.label}
-          setOpenItem={setOpenItem}
-        />
-      ))}
+    <VStack align="flex-start" gap="1" px={3} h={"fit-content"}>
+      {userSidebarItems.map((item) => {
+        const isChild = isChildItem(item, userSidebarItems);
+
+        return (
+          <SidebarItem
+            key={item.label}
+            icon={item.icon}
+            label={item.label}
+            isExpanded={isExpanded}
+            url={item.url}
+            onClick={onClick}
+            nestedItem={item.children}
+            isOpen={openItem === item.label}
+            setOpenItem={setOpenItem}
+            isChild={isChild}
+          />
+        );
+      })}
     </VStack>
   );
 };
@@ -203,6 +248,7 @@ type SidebarItemProps = {
   nestedItem?: SidebarChildItem[];
   isOpen: boolean;
   setOpenItem: React.Dispatch<React.SetStateAction<string | null>>;
+  isChild?: boolean;
 };
 
 // SidebarItem component, which is used to render the sidebar items and nested items
@@ -215,19 +261,15 @@ export const SidebarItem = ({
   nestedItem = [],
   isOpen,
   setOpenItem,
+  isChild,
 }: SidebarItemProps) => {
   const pathname = usePathname();
   const isActive = pathname === url; // Check if the current path matches the item's URL
   const hasActiveChild = nestedItem?.some((item) => item.url === pathname); // Check if any child item is active
 
-  const textColor = useColorModeValue("#030229", "white");
-  const activeTextColor = useColorModeValue("#605BFF", "#605BFF");
-  const bgHover = useColorModeValue("#605BFF", "#605BFF");
-
-  const isActiveBg = useColorModeValue(
-    `linear-gradient(to right, rgba(172, 169, 255, 0.4) , rgba(172, 169, 255, 0))`,
-    `linear-gradient(to right, rgba(172, 169, 255, 0.5) 2%, rgba(172, 169, 255, 0.1) 20%, rgba(127, 127, 213, 0) 100%)`
-  );
+  const textColor = useColorModeValue("#03022980", "#03022980");
+  const activeTextColor = useColorModeValue("#5B42F3", "#5B42F3");
+  const bgHover = useColorModeValue("#5B42F3", "#5B42F3");
 
   const hasChildren = Array.isArray(nestedItem) && nestedItem.length > 0; // Check if the item has children
 
@@ -236,17 +278,19 @@ export const SidebarItem = ({
 
   // Function to handle different click events
   const handleClick = () => {
-    if (nestedItem && nestedItem.length > 0) {
-      // Toggle nested item open/close
-      setOpenItem(isOpen ? null : label);
-    } else if (nestedItem && nestedItem.length === 0) {
-      // Close any open nested menu
-      setOpenItem(null);
-      // Also close drawer
+    if (isChild) {
       setTimeout(() => {
         onClick?.();
       }, 800);
+      return;
+    }
+
+    if (hasChildren) {
+      // Toggle nested item open/close
+      setOpenItem(isOpen ? null : label);
     } else {
+      // Close any open nested menu
+      setOpenItem(null);
       // Also close drawer
       setTimeout(() => {
         onClick?.();
@@ -255,32 +299,35 @@ export const SidebarItem = ({
   };
 
   return (
-    <Box onClick={handleClick}>
+    <Box w={"100%"}>
       {!hasChildren ? (
         // Items which do not have children and are --Links--
         <Link href={url}>
           <Flex
             align="center"
-            justify={isExpanded ? "start" : "center"}
-            w="100%"
+            w={isExpanded ? "100%" : "fit"}
+            ml={isExpanded ? "" : "3.5px"}
             color={isActive ? activeTextColor : textColor}
-            opacity={isActive ? 1 : 0.5}
-            _hover={{ color: !isActive ? bgHover : undefined, opacity: 1 }}
+            _hover={{ color: !isActive ? bgHover : undefined }}
             cursor="pointer"
+            bg={isActive ? "rgba(172, 169, 255, 0.25)" : ""}
+            px={"2.5"}
+            pr={isExpanded ? 0 : "2.5"}
+            py={2}
+            rounded={"lg"}
             onClick={handleClick}
           >
-            <chakra.span
-              bgGradient={isActive ? isActiveBg : ""}
-              pl={isExpanded ? "3" : "6"}
-              py={2}
-            >
+            <chakra.span display={"flex"} alignItems={"center"}>
               <Icon as={icon} boxSize="5" />
             </chakra.span>
             {isExpanded && (
               <Text
                 ml="4"
-                fontSize="13px"
+                fontSize="16px"
                 fontWeight={isActive ? "bold" : "normal"}
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
               >
                 {label}
               </Text>
@@ -291,45 +338,51 @@ export const SidebarItem = ({
         // Item which have children and are not --Links--
         <Flex
           align="center"
-          w="100%"
+          w={isExpanded ? "100%" : "fit"}
+          ml={isExpanded ? "" : "3.5px"}
           color={hasActiveChild ? activeTextColor : textColor}
-          opacity={hasActiveChild ? 1 : 0.5}
-          _hover={{ color: !isActive ? bgHover : undefined, opacity: 1 }}
+          _hover={{ color: !isActive ? bgHover : undefined }}
+          px={"2.5"}
+          pr={isExpanded ? 0 : "2.5"}
+          py={2}
           cursor="pointer"
           onClick={handleClick}
         >
-          <chakra.span
-              bgGradient={hasActiveChild ? isActiveBg : ""}
-              pl={isExpanded ? "3" : "6"}
-              py={2}
-            >
-              <Icon as={icon} boxSize="5" />
-            </chakra.span>
+          <chakra.span display={"flex"} alignItems={"center"}>
+            <Icon as={icon} boxSize="5" />
+          </chakra.span>
           {isExpanded && (
-            <Text
-              ml="4"
-              fontSize="13px"
-              fontWeight={isActive ? "bold" : "normal"}
-              display={"flex"}
-              alignItems={"center"}
-              gap={1}
-            >
-              {label}
+            <>
+              <Text
+                ml="4"
+                fontSize="16px"
+                fontWeight={hasActiveChild ? "bold" : "normal"}
+                display={"flex"}
+                alignItems={"center"}
+                gap={1}
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
+                {label}
+              </Text>
+
               <chakra.span
-                rotate={!isOpen ? "-90deg" : "0deg"}
+                rotate={!isOpen ? "0deg" : "-180deg"}
                 mt={0.5}
                 transition={"all 0.35s"}
+                ml={"auto"}
               >
                 <IoChevronDown />
               </chakra.span>
-            </Text>
+            </>
           )}
         </Flex>
       )}
 
       {/* Render nested children which are --Links--, only if expanded and open */}
       <AnimatePresence initial={false}>
-        {isExpanded && isOpen && hasChildren && (
+        {isExpanded && isOpen && (
           <MotionDiv
             direction="column"
             gap="1"
@@ -345,21 +398,24 @@ export const SidebarItem = ({
                   align="center"
                   w="100%"
                   p={1}
-                  pl={isExpanded ? "5" : "2"}
-                  fontSize="10px"
+                  pl={"3.5"}
+                  rounded={"lg"}
                   color={pathname === item.url ? activeTextColor : textColor}
-                  opacity={pathname === item.url ? 1 : 0.5}
-                  _hover={{ color: bgHover, opacity: 1 }}
-                  fontWeight={pathname === item.url ? "bold" : "normal"}
+                  bg={pathname === item.url ? "rgba(172, 169, 255, 0.25)" : ""}
+                  _hover={{ color: bgHover }}
                   cursor="pointer"
-                  onClick={onClick}
+                  onClick={() => {
+                    setTimeout(() => {
+                      onClick?.();
+                    }, 800);
+                  }}
                 >
                   <Icon as={item.icon} boxSize="3" />
                   {isExpanded && (
                     <Text
-                      ml="4"
-                      fontSize="11px"
-                      fontWeight={isActive ? "bold" : "normal"}
+                      ml="5"
+                      fontSize="14px"
+                      fontWeight={pathname === item.url ? "bold" : "normal"}
                     >
                       {item.label}
                     </Text>

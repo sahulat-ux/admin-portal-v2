@@ -11,8 +11,8 @@ function Layout({ children }: { children: React.ReactNode }) {
     <>
       <Sidebar />
       <Box
-        ml={isExpanded ? { base: "0px", xl: "220px" } : "73px"}
-        transition="margin-left 0.35s ease-in-out"
+        ml={isExpanded ? { base: "0px", xl: "260px" } : "73px"}
+        transition="margin-left 0.3s ease-in-out"
       >
         {children}
       </Box>
