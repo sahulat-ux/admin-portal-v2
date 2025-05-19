@@ -6,6 +6,7 @@ import {
   Icon,
   Input,
   Portal,
+  Skeleton,
   Text,
   VStack,
   chakra,
@@ -16,13 +17,12 @@ import { useColorModeValue } from "../ui/color-mode";
 
 type CardProps = {
   title: string;
-  amount: string | null; // Allow null for when the amount is not available
-  loader?: boolean;
+  amount: string | number;
   disbursementPercentage?: number;
   icon: IconType;
   bgCard: string;
-  bgIcon: string;
   colorIcon: string;
+  isLoading: boolean;
 };
 
 const UserBalanceCard = ({
@@ -30,8 +30,8 @@ const UserBalanceCard = ({
   amount,
   icon,
   bgCard,
-  bgIcon,
   colorIcon,
+  isLoading,
 }: CardProps) => {
   const textColor = useColorModeValue("#030229", "#030229");
   const cardBg = useColorModeValue(bgCard, "bgCard");
@@ -42,13 +42,15 @@ const UserBalanceCard = ({
   const dialog = useDialog();
 
   // Format the amount with commas as thousand separators and two decimal places
-  const formattedAmount =
-    amount !== null
-      ? parseFloat(amount).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      : null;
+  const number = amount ?? 0;  // agar amount undefined ya null ho toh 0 use karo
+
+const formattedAmount =
+  isLoading
+    ? null
+    : parseFloat(String(number)).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
   return (
     <>
@@ -102,14 +104,19 @@ const UserBalanceCard = ({
         </Box>
 
         <VStack align={"start"} gap={1}>
-          <Text
+          {isLoading ? (
+            <Skeleton h={"30px"} w={"full"}/>
+          ) : 
+          (
+            <Text
             fontSize={{ base: "lg", md: "xl" }}
             fontWeight={"semibold"}
             wordBreak={"break-word"}
             opacity={0.7}
           >
-            Rs{formattedAmount}
+            {title === "Total User" ? formattedAmount : `Rs${formattedAmount}`}
           </Text>
+          )}
 
           <Text opacity={0.7} fontSize={"sm"} color={textColor}>
             {title}

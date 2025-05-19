@@ -40,8 +40,8 @@ export default function LoginPage() {
   const buttonBackground = useColorModeValue("#4c71ff", "#4c71ff");
   const iconColor = useColorModeValue("gray.500", "gray.500");
   const logoColor = useColorModeValue(
-    "/sahulatpay-logo-light.svg",
-    "/sahulatpay-logo-light.svg"
+    "/auth/sahulatpay-logo-light.svg",
+    "/auth/sahulatpay-logo-light.svg"
   );
 
   const validateFields = () => {
@@ -79,27 +79,32 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async () => {
-    if (!validateFields()) return;
+  if (!validateFields()) return;
 
-    setIsLoading(true);
-    try {
-      const response = await loginCall(email, password);
+  setIsLoading(true);
+  setError("");
+
+  try {
+    const response = await loginCall(email, password);
+
+    if (response?.success) {
       const token = response.data.token;
       const encodedToken = await decodeJwtToken(token);
 
-      if (response.success) {
-        if (encodedToken?.role === "Admin") {
-          router.push("/");
-        }
+      if (encodedToken?.role === "Admin") {
+        router.push("/");
       } else {
-        setError("Invalid email or password.");
+        setError("You are not authorized to access this application.");
       }
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
+    } else {
+      setError("Invalid email or password.");
     }
-  };
+  } catch (e: any) {
+    setError(e.message || "Something went wrong.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   useEffect(() => {
     localStorage.clear();

@@ -30,10 +30,10 @@ const Sidebar = () => {
   const bg = useColorModeValue("#fff", "#fff");
   const color = useColorModeValue("#757a7d", "#757a7d");
   const logoColor = useColorModeValue(
-    "/sahulatpay-logo-light.svg",
-    "/sahulatpay-logo-light.svg"
+    "/auth/sahulatpay-logo-light.svg",
+    "/auth/sahulatpay-logo-light.svg"
   );
-  const logoCollapse = useColorModeValue("/logo.svg", "/logo.svg")
+  const logoCollapse = useColorModeValue("/auth/logo.svg", "/auth/logo.svg")
 
   return (
     <>
