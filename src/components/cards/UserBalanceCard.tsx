@@ -55,7 +55,6 @@ const formattedAmount =
   return (
     <>
       <Box
-        boxShadow={"sm"}
         rounded={"xl"}
         p={"4"}
         display={"flex"}
@@ -63,6 +62,7 @@ const formattedAmount =
         alignItems={"center"}
         gap={"5"}
         bg={cardBg}
+        color={textColor}
         minH={"115px"}
         h={"full"}
       >
@@ -109,8 +109,8 @@ const formattedAmount =
           ) : 
           (
             <Text
-            fontSize={{ base: "lg", md: "xl" }}
-            fontWeight={"semibold"}
+            fontSize={"lg"}
+            fontWeight={"extrabold"}
             wordBreak={"break-word"}
             opacity={0.7}
           >

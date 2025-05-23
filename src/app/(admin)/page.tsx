@@ -1,8 +1,10 @@
 "use client";
 
 import UserBalanceCard from "@/components/cards/UserBalanceCard";
+import { useColorModeValue } from "@/components/ui/color-mode";
 import useFetchAdminDashboardData from "@/hooks/useFetchAdminDashboardData";
 import { handleDateRangeSelection } from "@/utils/dateRangeSelector";
+import { DashboardTransactionTable } from "@/views/dashboard/DashboardTransactionTable";
 import {
   Box,
   Button,
@@ -25,6 +27,8 @@ import { RiRefund2Line } from "react-icons/ri";
 import { SiOpencollective } from "react-icons/si";
 
 function Page() {
+  const textColor = useColorModeValue("#6D6D6D`", "#6D6D6D`");
+
   const { data, allData, error, isLoading, fetchData } = useFetchAdminDashboardData();
 
   // Destructure todayIncome and other fields from allData for use in the component
@@ -104,9 +108,9 @@ function Page() {
   }, [selectedRange, fetchData]);
 
   return (
-    <Box p={6} display={"flex"} flexDir={"column"} gap={6}>
+    <Box p={8} display={"flex"} flexDir={"column"} gap={6} color={textColor}>
       <HStack align={"center"} justify={"space-between"}>
-        <Heading fontSize={"2xl"}>Dashboard</Heading>
+        <Heading fontWeight={"semibold"} fontSize={"2xl"} color={"#030229"}>Dashboard</Heading>
 
         {/* Date filter Menu */}
         <Box>
@@ -219,7 +223,7 @@ function Page() {
             amount={todayIncome}
             icon={BiCollection}
             bgCard="white"
-            colorIcon="#605BFF"
+            colorIcon="#ca7fdc"
             isLoading={isLoading}
           />
         </GridItem>
@@ -230,7 +234,7 @@ function Page() {
             amount={totalIncome}
             icon={BiCollection}
             bgCard="white"
-            colorIcon="#B85EFF"
+            colorIcon="#ca7fdc"
             isLoading={isLoading}
           />
         </GridItem>
@@ -241,7 +245,7 @@ function Page() {
             amount={totalBalanceToDisburse}
             icon={BiCollection}
             bgCard="white"
-            colorIcon="#FF8F6B"
+            colorIcon="#FF6A77"
             isLoading={isLoading}
           />
         </GridItem>
@@ -285,7 +289,7 @@ function Page() {
             amount={totalUsdtSettlement}
             icon={BiDollar}
             bgCard="white"
-            colorIcon="#00C4B4"
+            colorIcon="#26C0E2"
             isLoading={isLoading}
           />
         </GridItem>
@@ -296,7 +300,7 @@ function Page() {
             amount={remainingSettlements}
             icon={BiCollection}
             bgCard="white"
-            colorIcon="#3B8CFF"
+            colorIcon="#26C0E2"
             isLoading={isLoading}
           />
         </GridItem>
@@ -323,6 +327,12 @@ function Page() {
           />
         </GridItem>
       </Grid>
+
+      <DashboardTransactionTable
+        data={data}
+        error={error}
+        isLoading={isLoading}
+      />
     </Box>
   );
 }
