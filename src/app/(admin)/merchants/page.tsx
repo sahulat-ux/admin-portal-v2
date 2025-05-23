@@ -24,6 +24,7 @@ import { Menu, Portal, IconButton } from "@chakra-ui/react"
 import { FiMoreHorizontal } from "react-icons/fi"
 import { FaPencilAlt, FaTrash } from "react-icons/fa"
 import { Merchant } from "@/utils/types";
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
 
 
   const handleEdit = (merchant: Merchant) => {
@@ -74,25 +75,32 @@ const columns: ColumnDef<Merchant>[] = [
         <Menu.Trigger asChild>
           <IconButton
             aria-label="Open actions menu"
-            
-            variant="ghost"
-            size="sm"
-          ><FiMoreHorizontal /></IconButton>
+            _hover={{ bg: "none" , color: "#605BFF"}}
+            variant={"ghost"}
+            size="md"
+          ><PiDotsThreeOutlineFill /></IconButton>
         </Menu.Trigger>
 
         {/* portal + positioning */}
         <Portal>
           <Menu.Positioner>
             <Menu.Content
+              w={"110px"}
+              h={"79px"}
               p={0}
               borderRadius="12px"
               boxShadow="md"
               overflow="hidden"
+              padding={'10px'}
             >
               {/* Edit */}
               <Menu.Item
                 value="edit"
-                _hover={{ bg: "blue.50" }}
+                // _hover={{ bg: "blue.50" }}
+                
+                bgColor={"#5B93FF"}
+                borderRadius={"5px"}
+                opacity={"5%"}
               >
                 <Flex align="center">
                   <FaPencilAlt />
@@ -101,7 +109,7 @@ const columns: ColumnDef<Merchant>[] = [
               </Menu.Item>
 
               {/* Delete */}
-              <Menu.Item
+              {/* <Menu.Item
                 value="delete"
                 _hover={{ bg: "red.50" }}
                 color="red.600"
@@ -110,7 +118,7 @@ const columns: ColumnDef<Merchant>[] = [
                   <FaTrash />
                   <Text ml={2}>Delete</Text>
                 </Flex>
-              </Menu.Item>
+              </Menu.Item> */}
             </Menu.Content>
           </Menu.Positioner>
         </Portal>
