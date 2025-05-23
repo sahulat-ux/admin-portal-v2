@@ -23,21 +23,8 @@ import { FaCaretUp, FaCaretDown } from "react-icons/fa";
 import { Menu, Portal, IconButton } from "@chakra-ui/react"
 import { FiMoreHorizontal } from "react-icons/fi"
 import { FaPencilAlt, FaTrash } from "react-icons/fa"
+import { Merchant } from "@/utils/types";
 
-
-// 1️⃣ Define Merchant type
-type Merchant = {
-  uid: string;
-  merchant_id: number;
-  full_name: string;
-  company_name: string;
-  phone_number: string;
-  city: string | null;
-  payment_volume: string;
-  balanceToDisburse: string;
-  commissions: any[];
-  createdAt: string;
-};
 
   const handleEdit = (merchant: Merchant) => {
     // e.g. push to an edit page, open a modal, etc.

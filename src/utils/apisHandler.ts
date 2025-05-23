@@ -20,13 +20,10 @@ export async function loginCall(email: string, password: string) {
 }
 
 
-// export interface Merchant {
-//   id: string;
-//   name: string;
-//   // …add any other fields you expect
-// }
 
-export async function getMerchants(): Promise<any[]> {
+
+
+export async function getMerchants(): Promise<any> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ?? "";
   const res = await fetch(`${baseUrl}/merchant`, {
     credentials: "include",
