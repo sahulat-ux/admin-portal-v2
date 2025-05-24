@@ -52,15 +52,15 @@ interface SidebarRoutesProps {
 // Sidebar Items
 const userSidebarItems: SidebarConfigItem[] = [
   { label: "Dashboard", icon: LuLayoutGrid, url: "/" },
-  { label: "Merchants", icon: LuStore, url: "/admin/merchants" },
+  { label: "Merchants", icon: LuStore, url: "/merchants" },
   {
     label: "Ecommerce Merchants",
     icon: MdOutlineLocalGroceryStore,
     url: "#",
     children: [{ label: "wooCommerce", icon: LuStore, url: "#" }],
   },
-  { label: "Transactions", icon: LuArrowLeftRight, url: "/admin/transactions" },
-  { label: "Reports", icon: LuFileText, url: "/admin/reports" },
+  { label: "Transactions", icon: LuArrowLeftRight, url: "/transactions" },
+  { label: "Reports", icon: LuFileText, url: "/reports" },
   { label: "Finance Reports", icon: LuChartColumnStacked, url: "#" },
   { label: "Disbursements", icon: RiStackFill, url: "#" },
   { label: "Disbursement Requests", icon: PiClockCountdownFill, url: "#" },
@@ -80,7 +80,7 @@ const userSidebarItems: SidebarConfigItem[] = [
         icon: MdOutlinePayments,
         url: "/gateway/easypaisa",
       },
-      { label: "Swich", icon: MdOutlinePayments, url: "/admin/gateway/swich" },
+      { label: "Swich", icon: MdOutlinePayments, url: "/gateway/swich" },
       {
         label: "Zindigi",
         icon: MdOutlinePayments,

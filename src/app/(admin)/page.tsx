@@ -4,7 +4,7 @@ import UserBalanceCard from "@/components/cards/UserBalanceCard";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import useFetchAdminDashboardData from "@/hooks/useFetchAdminDashboardData";
 import { handleDateRangeSelection } from "@/utils/dateRangeSelector";
-import { DashboardTransactionTable } from "@/views/dashboard/DashboardTransactionTable";
+import { DashboardTransactionTable } from "@/views/pages/dashboard/DashboardTransactionTable";
 import {
   Box,
   Button,

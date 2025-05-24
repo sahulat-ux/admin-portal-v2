@@ -1,7 +1,7 @@
 "use client";
 
 import { useSidebar } from "@/context/SidebarProvider";
-import Sidebar from "@/views/Sidebar";
+import Sidebar from "@/views/navigation/Sidebar";
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
