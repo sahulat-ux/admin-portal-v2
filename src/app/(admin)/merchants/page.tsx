@@ -1,6 +1,6 @@
 "use client";
 
-import { getMerchants } from "@/utils/apisHandler";
+
 import React, { useState, useEffect } from "react";
 import { Box, Table, Icon, Text, Flex, Skeleton, Button, HStack } from "@chakra-ui/react";
 import {
@@ -16,9 +16,9 @@ import { FaCaretUp, FaCaretDown } from "react-icons/fa";
 import { Menu, Portal, IconButton } from "@chakra-ui/react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
-import { Merchant } from "@/utils/types";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { FaEye } from "react-icons/fa6";
+import { Merchant } from "../../../utils/types";
 
 const handleEdit = (merchant: Merchant) => {
   // e.g. push to an edit page, open a modal, etc.
