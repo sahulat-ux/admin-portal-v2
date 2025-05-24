@@ -18,3 +18,21 @@ export async function loginCall(email: string, password: string) {
     }
     return data
 }
+
+
+
+
+
+export async function getMerchants(): Promise<any> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ?? "";
+  const res = await fetch(`${baseUrl}/merchant`, {
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to load merchants (${res.status})`);
+  }
+
+  return res.json();
+}
