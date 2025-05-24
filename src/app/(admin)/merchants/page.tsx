@@ -2,14 +2,7 @@
 
 import { getMerchants } from "@/utils/apisHandler";
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Table,
-  Icon,
-  Text,
-  Flex,
-  Skeleton,
-} from "@chakra-ui/react";
+import { Box, Table, Icon, Text, Flex, Skeleton, Button, HStack } from "@chakra-ui/react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -19,116 +12,138 @@ import {
   ColumnDef,
   SortingState,
 } from "@tanstack/react-table";
-import { FaCaretUp, FaCaretDown } from "react-icons/fa";  
-import { Menu, Portal, IconButton } from "@chakra-ui/react"
-import { FiMoreHorizontal } from "react-icons/fi"
-import { FaPencilAlt, FaTrash } from "react-icons/fa"
+import { FaCaretUp, FaCaretDown } from "react-icons/fa";
+import { Menu, Portal, IconButton } from "@chakra-ui/react";
+import { FiMoreHorizontal } from "react-icons/fi";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Merchant } from "@/utils/types";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import { FaEye } from "react-icons/fa6";
 
+const handleEdit = (merchant: Merchant) => {
+  // e.g. push to an edit page, open a modal, etc.
+  console.log("Edit merchant", merchant);
+};
 
-  const handleEdit = (merchant: Merchant) => {
-    // e.g. push to an edit page, open a modal, etc.
-    console.log("Edit merchant", merchant);
-  };
-
-  const handleDelete = (merchant: Merchant) => {
-    // e.g. open a confirmation dialog, call your delete API, refresh table…
-    console.log("Delete merchant", merchant);
-  };
-
+const handleview = (merchant: Merchant) => {
+  // e.g. open a confirmation dialog, call your view API, refresh table…
+  console.log("view merchant", merchant);
+};
 
 // 2️⃣ Column definitions
 const columnHelper = createColumnHelper<Merchant>();
 const columns: ColumnDef<Merchant>[] = [
   columnHelper.accessor("uid", {
     header: "ID",
-    cell: info => info.getValue(),
+    cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("company_name", {
     header: "Company",
-    cell: info => info.getValue(),
+    cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("full_name", {
     header: "Merchant Name",
-    cell: info => info.getValue(),
+    cell: (info) => info.getValue(),
   }),
   // inside your ColumnDef<Merchant>[]
-{
-  id: "actions",
-  // header: "Actions",
-  cell: ({ row }) => {
-    const merchant = row.original;
+  {
+    id: "actions",
+    // header: "Actions",
+    cell: ({ row }) => {
+      const merchant = row.original;
 
-    return (
-      <Menu.Root
-        onSelect={(detail) => {
-          if (detail.value === "edit") {
-            handleEdit(merchant);
-          }
-          if (detail.value === "delete") {
-            handleDelete(merchant);
-          }
-        }}
-      >
-        {/* trigger button */}
-        <Menu.Trigger asChild>
-          <IconButton
-            aria-label="Open actions menu"
-            _hover={{ bg: "none" , color: "#605BFF"}}
-            variant={"ghost"}
-            size="md"
-          ><PiDotsThreeOutlineFill /></IconButton>
-        </Menu.Trigger>
-
-        {/* portal + positioning */}
-        <Portal>
-          <Menu.Positioner>
-            <Menu.Content
-              w={"110px"}
-              h={"79px"}
-              p={0}
-              borderRadius="12px"
-              boxShadow="md"
-              overflow="hidden"
-              padding={'10px'}
+      return (
+        <Menu.Root
+          onSelect={(detail) => {
+            if (detail.value === "edit") {
+              handleEdit(merchant);
+            }
+            if (detail.value === "view") {
+              handleview(merchant);
+            }
+          }}
+        >
+          {/* trigger button */}
+          <Menu.Trigger asChild>
+            <IconButton
+              aria-label="Open actions menu"
+              unstyled // ← no default bg or ring
+              size="md"
+              p={2}
+              _hover={{ color: "#605BFF" }}
+              _open={{ color: "#605BFF" }}
+              _closed={{ focusRing: "none", color: "black" }}
+              _data-state-open={{
+                color: "#605BFF",
+              }}
             >
-              {/* Edit */}
-              <Menu.Item
-                value="edit"
-                // _hover={{ bg: "blue.50" }}
-                
-                bgColor={"#5B93FF"}
-                borderRadius={"5px"}
-                opacity={"5%"}
-              >
-                <Flex align="center">
-                  <FaPencilAlt />
-                  <Text ml={2}>Edit</Text>
-                </Flex>
-              </Menu.Item>
+              <PiDotsThreeOutlineFill />
+            </IconButton>
+          </Menu.Trigger>
 
-              {/* Delete */}
-              {/* <Menu.Item
-                value="delete"
-                _hover={{ bg: "red.50" }}
-                color="red.600"
+          {/* portal + positioning */}
+          <Portal>
+            <Menu.Positioner>
+              <Menu.Content
+                w="auto"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                spaceY="5px"
+                p="10px"
+                borderRadius="12px"
+                boxShadow="0px 10px 20px 0px #0000001A"
               >
-                <Flex align="center">
-                  <FaTrash />
-                  <Text ml={2}>Delete</Text>
-                </Flex>
-              </Menu.Item> */}
-            </Menu.Content>
-          </Menu.Positioner>
-        </Portal>
-      </Menu.Root>
-    );
+                {/* Edit */}
+                <Menu.Item
+                  value="edit"
+                  // _hover={{ bg: "blue.50" }}
+                  w={"90px"}
+                  bgColor={"#f7faff"}
+                  borderRadius={"5px"}
+                >
+                  <Flex color={"#5B93FF"} align="center">
+                    <FaPencilAlt />
+                    <Text
+                      fontWeight={"400px"}
+                      fontSize={"10px"}
+                      lineHeight={"100%"}
+                      ml={2}
+                    >
+                      Edit
+                    </Text>
+                  </Flex>
+                </Menu.Item>
+
+                {/* view */}
+                <Menu.Item
+                  value="view"
+                  w={"90px"}
+                  bgColor={"#ebf5ed"}
+                  borderRadius={"5px"}
+                >
+                  <Flex color={"#3A974C"} align="center">
+                    <FaEye size={"12px"} />
+                    <Text
+                      fontWeight={"400px"}
+                      fontSize={"10px"}
+                      lineHeight={"100%"}
+                      ml={2}
+                    >
+                      view
+                    </Text>
+                  </Flex>
+                </Menu.Item>
+              </Menu.Content>
+            </Menu.Positioner>
+          </Portal>
+        </Menu.Root>
+      );
+    },
+    enableSorting: false,
+    size: 50,
   },
-  enableSorting: false,
-  size: 50,
-},
-
 ];
 
 const MerchantsPage = () => {
@@ -161,30 +176,37 @@ const MerchantsPage = () => {
     })();
   }, []);
 
-
   const handleEdit = (merchant: Merchant) => {
     // e.g. push to an edit page, open a modal, etc.
     console.log("Edit merchant", merchant);
   };
 
-  const handleDelete = (merchant: Merchant) => {
-    // e.g. open a confirmation dialog, call your delete API, refresh table…
-    console.log("Delete merchant", merchant);
+  const handleview = (merchant: Merchant) => {
+    // e.g. open a confirmation dialog, call your view API, refresh table…
+    console.log("view merchant", merchant);
   };
-  
 
   if (loading) return <p>Loading merchants…</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
     <Box rounded={"xl"} p={6}>
-      <Box my={"4"} px={"4"}>
-        <Text fontSize={"xl"} fontWeight={"medium"} color={"#030229"}>
-          Latest Transactions
+      <HStack justify={"space-between"} my={"4"} px={"4"}>
+        <Text fontSize={"24px"}  fontWeight={"700"} color={"#030229"}>
+          Merchants List
         </Text>
-      </Box>
+        <Button
+        w={"165px"}
+        h={"42px"}
+        borderRadius={"10px"}
+        bgColor={"#605BFF"}
+        fontSize={"16px"}>
+          + Add Customer
+        </Button>
+      </HStack>
 
       <Table.ScrollArea
+        mt={"33px"}
         rounded={"xl"}
         overflow={loading ? "hidden" : "auto"}
         className="custom-scrollbar"
@@ -199,14 +221,16 @@ const MerchantsPage = () => {
           {/* Header */}
           <Table.Header>
             {table.getHeaderGroups().map((headerGroup) => (
-              <Table.Row key={headerGroup.id} bg={"none"} transition={"all 0.3s"}>
+              <Table.Row
+                key={headerGroup.id}
+                bg={"none"}
+                transition={"all 0.3s"}
+              >
                 {headerGroup.headers.map((header, headerIndex) => (
                   <Table.ColumnHeader
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    cursor={
-                      header.column.getCanSort() ? "pointer" : "default"
-                    }
+                    cursor={header.column.getCanSort() ? "pointer" : "default"}
                     transition={"all 0.3s"}
                     px={4}
                     fontSize={"12px"}
@@ -282,8 +306,7 @@ const MerchantsPage = () => {
                   key={row.id}
                   transition={"all 0.3s"}
                   _hover={{
-                    filter:
-                      "drop-shadow(1px 17px 44px rgba(3, 2, 41, 0.08))",
+                    filter: "drop-shadow(1px 17px 44px rgba(3, 2, 41, 0.08))",
                   }}
                   borderRadius={"12px"}
                 >
@@ -297,8 +320,7 @@ const MerchantsPage = () => {
                       borderRadius={
                         cellIndex === 0
                           ? "10px 0 0 10px"
-                          : cellIndex ===
-                            row.getVisibleCells().length - 1
+                          : cellIndex === row.getVisibleCells().length - 1
                           ? "0 10px 10px 0"
                           : "none"
                       }
@@ -310,14 +332,12 @@ const MerchantsPage = () => {
                             ? "210px"
                             : cellIndex === 3
                             ? "200px"
-                            : cellIndex ===
-                              row.getVisibleCells().length - 1
+                            : cellIndex === row.getVisibleCells().length - 1
                             ? "fit"
                             : "140px"
                         }
                         whiteSpace={
-                          cellIndex ===
-                          row.getVisibleCells().length - 1
+                          cellIndex === row.getVisibleCells().length - 1
                             ? "nowrap"
                             : "wrap"
                         }
